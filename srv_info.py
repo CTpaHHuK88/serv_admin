@@ -1,8 +1,11 @@
-import os
-import sys
-import psutil
+import os, sys, psutil
+import datetime
 from psutil._common import bytes2human
 
+
+
+def show_date():
+    return datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M:%S")
 
 def disk_info():
     templ = "{:<17} {:>8} {:>8} {:>8} {:>5}% {:>9}  {}"
@@ -31,20 +34,21 @@ def disk_info():
         print(line)
 
 def main():
-
+    print(f"Система загружена: {show_date()}")
     temps = psutil.sensors_temperatures()
     for name, entries in temps.items():
         for entry in entries:
             print(f"Temperature CPU: {entry.current} C")
+
+            if entry.current > 20:
+                bot.send_message(chat_id, 'Температура превышена!')
     
     print(f"CPU usage: {psutil.cpu_percent()} %")
     print(f"RAM usage: {psutil.virtual_memory().percent} %")
     print(f"SWAP free: {bytes2human(psutil.swap_memory().free)} Mb")
-
-
     disk_info()
-
-
+    
+bot.polling()
 
 if __name__ == '__main__':
     main()
