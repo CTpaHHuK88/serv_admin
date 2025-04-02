@@ -41,6 +41,7 @@ def main():
     print(f"RAM usage: {psutil.virtual_memory().percent} %")
     print(f"SWAP free: {bytes2human(psutil.swap_memory().free)} Mb")
 
+
     disk_info()
 
 
